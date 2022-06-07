@@ -1,18 +1,15 @@
 package com.gorbunov.nettest.gate
 
+import com.gorbunov.nettest.model.NetTestResponse
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import okhttp3.MediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import okhttp3.RequestBody
 import java.net.ConnectException
 import java.util.concurrent.TimeUnit
 
-class Gate {
-
+class Gate private constructor(){
 
     private val httpClient: OkHttpClient
     @OptIn(ExperimentalSerializationApi::class)
@@ -23,11 +20,8 @@ class Gate {
         explicitNulls = true// Позволяет декодировать в параметрах null
     }
 
-
-
     init {
         val b = OkHttpClient.Builder()
-
             .connectTimeout(15000, TimeUnit.MILLISECONDS)
             .writeTimeout(15000, TimeUnit.MILLISECONDS)
             .readTimeout(15000, TimeUnit.MILLISECONDS)
@@ -37,7 +31,7 @@ class Gate {
 
 
 
-    fun makeRequest(
+    fun makeGetRequest(
         url: String
     ): NetTestResponse? {
         val request = Request.Builder()
@@ -49,8 +43,8 @@ class Gate {
         return if (r.isSuccessful) {
             val response = r.body()?.string()
             if (response != null){
-                val a = format.decodeFromString<NetTestResponse>(response)
-                a
+                val ntr = format.decodeFromString<NetTestResponse>(response)
+                ntr
             }else{
                 null
             }

@@ -1,7 +1,12 @@
-package com.gorbunov.nettest.gate
+package com.gorbunov.nettest.model
 
 import kotlinx.serialization.Serializable
 
+
+/**
+ * Класс модели для парсинга ответа с сервера,
+ * некоторые поля не берутся для удобства
+ */
 
 @Serializable
 data class NetTestResponse(
