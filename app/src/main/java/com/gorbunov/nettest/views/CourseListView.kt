@@ -29,7 +29,9 @@ fun CourseListView(data: List<NetTestItem>) {
         contentPadding = PaddingValues(horizontal = 2.dp, vertical = 4.dp)
     ) {
         item {
-            //Отрисовка заголовка
+            /**
+             * Отрисовка заголовка
+             */
             Row(modifier = Modifier.fillMaxWidth()) {
                 //Создание строки с разными стилями
                 val annotatedText = buildAnnotatedString {
@@ -53,7 +55,9 @@ fun CourseListView(data: List<NetTestItem>) {
         }
         data.forEach { listItem ->
             item {
-                //Отрисовка элементов списка
+                /**
+                 * Отрисовка элементов списка
+                 */
                 Divider(modifier = Modifier.padding(vertical = 12.dp, horizontal = 12.dp))
                 Row(
                     modifier = Modifier

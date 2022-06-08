@@ -9,9 +9,21 @@ import okhttp3.Request
 import java.net.ConnectException
 import java.util.concurrent.TimeUnit
 
+
+/**
+ * Класс для взаимодействия с сетью
+ *  объявлен приватный конструктор, чтобы не создавать новый экземпляр каждый раз
+ */
 class Gate private constructor(){
 
+    /**
+     * Основной клиент для общения с сетью с гибкой настройкой куки, аутенфикации и т.д.
+     */
     private val httpClient: OkHttpClient
+
+    /**
+     * Экземпляр класса для работы с сериализацией
+     */
     @OptIn(ExperimentalSerializationApi::class)
     val format = Json {
         prettyPrint = true//Удобно печатает в несколько строчек
@@ -20,6 +32,10 @@ class Gate private constructor(){
         explicitNulls = true// Позволяет декодировать в параметрах null
     }
 
+
+    /**
+     * Настройка клиента, здесь можно добавить различные настройки в цепочке вызовов
+     */
     init {
         val b = OkHttpClient.Builder()
             .connectTimeout(15000, TimeUnit.MILLISECONDS)
@@ -29,11 +45,12 @@ class Gate private constructor(){
     }
 
 
-
-
+    /**
+     * Описание get запроса
+     */
     fun makeGetRequest(
         url: String
-    ): NetTestResponse? {
+    ): String? {
         val request = Request.Builder()
             .get()
             .url(url)
@@ -42,18 +59,16 @@ class Gate private constructor(){
 
         return if (r.isSuccessful) {
             val response = r.body()?.string()
-            if (response != null){
-                val ntr = format.decodeFromString<NetTestResponse>(response)
-                ntr
-            }else{
-                null
-            }
+            response
         } else {
             throw ConnectException("Ошибка запроса ${r.body()}")
         }
     }
 
 
+    /**
+     * Создание экземпляра класса статичной функцией
+     */
     companion object {
         var gate: Gate? = null
         fun getInstance(): Gate {

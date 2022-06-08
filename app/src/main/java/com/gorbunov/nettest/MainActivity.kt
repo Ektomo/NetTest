@@ -26,30 +26,46 @@ import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
 
+    /**
+     * Объявление вью модели для передачи в параметры. Так проще использовать если нужна будет навигация для Compose
+     *  в данном примере навигация не нужна
+     */
     private val viewModel: NetTestViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-
             NetTestTheme {
+                /**
+                 * Подготовленная тема, можно настраивать плавающую кнопку, верхний тулбар, нижний тулбар и т.д.
+                 */
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
+                    /**
+                     * Описание действия, внешнего вида и положения плавающей кнопки
+                     */
                     floatingActionButton = {
                         FloatingActionButton(onClick = {}, backgroundColor = Color.Cyan) {
-                            Icon(Icons.Filled.Email, contentDescription = "Создать новую")
+                            Icon(Icons.Filled.Email, contentDescription = "Тест кнопка")
                         }
                     },
                     floatingActionButtonPosition = FabPosition.End
                 ) {
 
+                    /**
+                     * Вспомогательные поля из библиотеки accompanist для работы с визуадьными элементами
+                     */
                     val systemUiController = rememberSystemUiController()
                     val useDarkIcons = MaterialTheme.colors.isLight
 
+                    /**
+                     * Вызов основного экрана
+                     */
                     NetTestScreen(viewModel = viewModel)
 
                     /**
                      * Сравнять фон цветов сверху и перекрасить иконки
+                     * SideEffect вызывается каждую перерисовку, тяжелые задачи сюда складывать нельзя
                      */
                     SideEffect {
                         systemUiController.setSystemBarsColor(

@@ -12,11 +12,25 @@ import com.gorbunov.nettest.viewmodels.NetTestViewModel
 import com.gorbunov.nettest.views.CourseListView
 import com.gorbunov.nettest.views.LoadingView
 
+
+/**
+ * Отрисовка основного экрана
+ *
+ * @param ViewModel
+ * @see com.gorbunov.nettest.viewmodels.NetTestViewModel
+ */
 @Composable
 fun NetTestScreen(viewModel: NetTestViewModel) {
 
-    val curState = viewModel._curState.collectAsState()
+    /**
+     * Переенная содержит текущее состояние, берет из StateFlow вью модели
+     *  состояние не мутабельное, его не возможно изменить из вью
+     */
+    val curState = viewModel.curState.collectAsState()
 
+    /**
+     * Собираем возможные экраны и отображаем в зависимости от текущего состояния
+     */
     when(val state = curState.value){
         is NetTestViewState.Error ->
             Box(modifier = Modifier.fillMaxSize()) {
@@ -31,6 +45,9 @@ fun NetTestScreen(viewModel: NetTestViewModel) {
         }
     }
 
+    /**
+     * Функция запуска загрузки списка, благодаря использованию константы в параметре key1 гарантируется загрузка только на входе в экран
+     */
     LaunchedEffect(key1 = Unit){
         viewModel.getData()
     }
